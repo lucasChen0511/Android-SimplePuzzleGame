@@ -12,13 +12,16 @@ import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
-import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private Bitmap mBitmap;
     int mScreenWidth;
     int mScreenHeight;
     private final int WC = ViewGroup.LayoutParams.WRAP_CONTENT;
+    ArrayList index = new ArrayList();
     int row = 5;
     int col = 5;
     ImageButton[] ib;
@@ -30,7 +33,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         ib = new ImageButton[25];
-        for (int i = 0; i < ib.length; i++) {
+
+        for(int i =0 ; i < ib.length ; i ++){
+            index.add(i);
+        }
+        Collections.shuffle(index);
+        for (int i = 0; i <ib.length; i++) {
+
             ib[i] = new ImageButton(this);
             ib[i].setId(i);
             //註冊 ImageButton 事件
@@ -59,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        Toast.makeText(this, "ID:" + view.getId(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "ID:" + view.getId(), Toast.LENGTH_SHORT).show();
         ImageButton t = (ImageButton) view; //獲取被點擊的按鈕
         boolean x = false;
         //判斷點選圖形是否相鄰
@@ -92,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             try {
                 for (int w = 0; w < mScreenWidth; w += mScreenWidth / col) {
                     count++;
-                    ib[count].setImageBitmap(Bitmap.createBitmap(mBitmap, w, h,
+                    ib[(int) index.get(count)].setImageBitmap(Bitmap.createBitmap(mBitmap, w, h,
                             mScreenWidth / row-1 , mScreenHeight / col-1, null, true));
                     tableRow.addView(ib[count], mScreenWidth / row, mScreenHeight / col);
                 }
@@ -100,8 +109,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.d("Exception", e.getMessage());
             }
         }
-        ib[count].setImageBitmap(null);
-        magicButton = ib[count];
+        ib[count-1].setImageBitmap(null);
+        magicButton = ib[count-1];
 
     }
 }
